@@ -4,6 +4,9 @@ export const prerender = true;
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/site/Hero.astro';
 import MissionStatement from '../components/site/MissionStatement.astro';
+import FeaturedStories from '../components/site/FeaturedStories.astro';
+import LatestArticles from '../components/site/LatestArticles.astro';
+import CategoryExplorer from '../components/site/CategoryExplorer.astro';
 import { siteConfig } from '../data/site';
 
 const jsonLd = {
@@ -12,11 +15,17 @@ const jsonLd = {
   name: siteConfig.name,
   url: siteConfig.url,
   description: siteConfig.description,
-  founder: { '@type': 'Person', name: siteConfig.editor.name },
+  founder: {
+    '@type': 'Person',
+    name: siteConfig.editor.name,
+  },
 };
 ---
 
 <BaseLayout jsonLd={jsonLd}>
   <Hero />
   <MissionStatement />
+  <FeaturedStories />
+  <LatestArticles />
+  <CategoryExplorer />
 </BaseLayout>
