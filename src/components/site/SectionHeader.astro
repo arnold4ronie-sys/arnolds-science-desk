@@ -1,0 +1,31 @@
+---
+interface Props {
+  headingId: string;
+  kicker: string;
+  title: string;
+  intro?: string;
+}
+
+const { headingId, kicker, title, intro } = Astro.props;
+---
+
+<header class="section-head">
+  <p class="kicker">{kicker}</p>
+  <h2 id={headingId}>{title}</h2>
+  {intro && <p class="intro">{intro}</p>}
+  <slot />
+</header>
+
+<style>
+  .section-head { margin-bottom: clamp(1.75rem, 4vw, 2.75rem); }
+  h2 {
+    margin-top: 1rem;
+    font-size: clamp(1.9rem, 4vw, 3rem);
+    line-height: 1.1;
+  }
+  .intro {
+    max-width: 38rem;
+    margin-top: 0.9rem;
+    color: var(--silver);
+  }
+</style>
