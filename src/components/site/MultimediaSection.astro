@@ -1,0 +1,112 @@
+---
+import SectionHeader from './SectionHeader.astro';
+
+const formats = [
+  {
+    number: '01',
+    title: 'Documentaries',
+    description: 'Visual reporting that explores scientific discoveries, health issues and the people behind the stories.',
+    label: 'Watch',
+  },
+  {
+    number: '02',
+    title: 'Photo essays',
+    description: 'Stories told through photographs, bringing research, communities and lived experiences into focus.',
+    label: 'Explore',
+  },
+  {
+    number: '03',
+    title: 'Interviews',
+    description: 'Conversations with researchers, health professionals, experts and people with stories to share.',
+    label: 'Listen',
+  },
+  {
+    number: '04',
+    title: 'Visual explainers',
+    description: 'Clear visual breakdowns of scientific ideas, health information and complex research.',
+    label: 'Discover',
+  },
+];
+---
+
+<section id="multimedia" class="multimedia section" aria-labelledby="multimedia-title">
+  <div class="container">
+    <SectionHeader
+      headingId="multimedia-title"
+      kicker="Beyond the written word"
+      title="Science in every frame"
+      intro="Some stories are better seen and heard. Explore our growing collection of visual and multimedia journalism."
+    />
+
+    <div class="formats">
+      {formats.map((format) => (
+        <article class="format-card">
+          <span class="number">{format.number}</span>
+          <div>
+            <h3>{format.title}</h3>
+            <p>{format.description}</p>
+          </div>
+          <span class="coming">Coming soon</span>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .multimedia {
+    background: var(--navy);
+  }
+
+  .formats {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .format-card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+
+  .number {
+    color: var(--crimson-text);
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+  }
+
+  h3 {
+    margin: 0 0 0.6rem;
+    color: var(--text);
+    font-family: var(--font-serif);
+    font-size: 1.4rem;
+    font-weight: 500;
+  }
+
+  p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.92rem;
+    line-height: 1.7;
+  }
+
+  .coming {
+    grid-column: 2;
+    justify-self: start;
+    color: var(--crimson-text);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 760px) {
+    .formats {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>
