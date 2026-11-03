@@ -1,0 +1,50 @@
+---
+import SectionHeader from './SectionHeader.astro';
+import SampleNotice from './SampleNotice.astro';
+import StoryCard from '../stories/StoryCard.astro';
+import { getFeaturedStories } from '../../data/sample/stories';
+
+const stories = getFeaturedStories(3);
+const [lead, ...rest] = stories;
+const hasSample = stories.some((s) => s.isSample);
+---
+
+{
+  lead && (
+    <section id="featured" class="featured section" aria-labelledby="featured-title">
+      <div class="container">
+        <SectionHeader headingId="featured-title" kicker="Featured" title="Stories to start with">
+          {hasSample && <SampleNotice />}
+        </SectionHeader>
+
+        <div class="grid">
+          <StoryCard story={lead} variant="lead" />
+          <div class="side">
+            {rest.map((story) => <StoryCard story={story} variant="row" />)}
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .featured { padding-top: 0; }
+
+  .grid {
+    display: grid;
+    gap: 2rem;
+  }
+  .side {
+    display: grid;
+    align-content: start;
+  }
+  .side :global(.card--row:first-child) { padding-top: 0; border-top: 0; }
+
+  @media (min-width: 900px) {
+    .grid {
+      grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+      gap: clamp(2rem, 4vw, 3.5rem);
+    }
+  }
+</style>
