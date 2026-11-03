@@ -1,0 +1,117 @@
+---
+import SectionHeader from './SectionHeader.astro';
+import CategoryTree from './CategoryTree.astro';
+import {
+  categories,
+  categoryHref,
+} from '../../data/categories';
+import { countDescendants } from '../../lib/categories';
+
+const topics = categories.map((category) => ({
+  ...category,
+  href: categoryHref([category.slug]),
+  subtopicCount: countDescendants(category),
+}));
+---
+
+<section id="topics" class="topics section" aria-labelledby="topics-title">
+  <div class="container">
+    <SectionHeader
+      headingId="topics-title"
+      kicker="Explore"
+      title="Explore our coverage"
+      intro="Explore the subjects shaping health, science, technology and the world around us."
+    />
+
+    <div class="grid">
+      {topics.map((topic) => (
+        <article class="topic-card">
+          <div class="topic-heading">
+            <h3><a href={topic.href}>{topic.name}</a></h3>
+            <span>{topic.subtopicCount} subtopics</span>
+          </div>
+
+          <CategoryTree
+            nodes={topic.children ?? []}
+            parentPath={[topic.slug]}
+          />
+
+          <a class="explore-link" href={topic.href}>
+            Explore {topic.name} <span aria-hidden="true">→</span>
+          </a>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .topics {
+    background: var(--black);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .topic-card {
+    min-width: 0;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+
+  .topic-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  h3 {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    font-weight: 500;
+  }
+
+  h3 a {
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  h3 a:hover,
+  .explore-link:hover {
+    color: var(--crimson-text);
+  }
+
+  .topic-heading span {
+    color: var(--muted);
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+
+  .explore-link {
+    display: inline-block;
+    margin-top: 1rem;
+    color: var(--text);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  @media (min-width: 700px) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>
