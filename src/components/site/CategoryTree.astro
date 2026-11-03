@@ -1,0 +1,65 @@
+---
+import { categoryHref, type CategoryNode } from '../../data/categories';
+import CategoryTree from './CategoryTree.astro';
+
+interface Props {
+  nodes: CategoryNode[];
+  parentPath: string[];
+}
+
+const { nodes, parentPath } = Astro.props;
+---
+
+<ul class="tree">
+  {nodes.map((node) => {
+    const path = [...parentPath, node.slug];
+    const href = categoryHref(path);
+    const children = node.children ?? [];
+
+    return (
+      <li>
+        {children.length > 0 ? (
+          <details>
+            <summary>{node.name}</summary>
+            <a class="all" href={href}>All {node.name}</a>
+            <CategoryTree nodes={children} parentPath={path} />
+          </details>
+        ) : (
+          <a class="leaf" href={href}>{node.name}</a>
+        )}
+      </li>
+    );
+  })}
+</ul>
+
+<style>
+  .tree {
+    display: grid;
+    gap: 0.5rem;
+    margin: 0.75rem 0 0;
+    padding-left: 1rem;
+    list-style: none;
+  }
+
+  details { display: grid; gap: 0.5rem; }
+
+  summary {
+    color: var(--text);
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  summary:hover,
+  .leaf:hover,
+  .all:hover { color: var(--crimson-text); }
+
+  .all,
+  .leaf {
+    display: inline-block;
+    color: var(--muted);
+    font-size: 0.9rem;
+    text-decoration: none;
+  }
+
+  .all { margin-top: 0.5rem; }
+</style>
