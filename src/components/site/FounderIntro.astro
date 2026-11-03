@@ -1,0 +1,85 @@
+---
+import SectionHeader from './SectionHeader.astro';
+
+const portfolioUrl = 'https://arnold4ronie-sys.github.io';
+---
+
+<section class="founder section" aria-labelledby="founder-title">
+  <div class="container">
+    <div class="founder-content">
+      <div class="eyebrow">Behind the publication</div>
+
+      <div class="copy">
+        <SectionHeader
+          headingId="founder-title"
+          kicker="Founder & editor"
+          title="Meet the person behind the stories"
+        />
+
+        <p class="description">
+          Arnold's Science Desk is an independent science communication and
+          health journalism publication founded and edited by Arnold.
+          It exists to make research, health information and scientific
+          developments clearer, more accessible and relevant to everyday life.
+        </p>
+
+        <p class="description">
+          With an interest in journalism, visual storytelling and public
+          communication, Arnold brings together evidence, human experiences
+          and clear reporting to explore the science shaping our world.
+        </p>
+
+        <a class="portfolio-link" href={portfolioUrl} target="_blank" rel="noopener noreferrer">
+          Explore the founder's portfolio <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .founder {
+    background: var(--black);
+  }
+
+  .founder-content {
+    max-width: 850px;
+    margin-inline: auto;
+  }
+
+  .eyebrow {
+    margin-bottom: 1.25rem;
+    color: var(--crimson-text);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .description {
+    max-width: 720px;
+    margin: 1.25rem 0 0;
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.85;
+  }
+
+  .portfolio-link {
+    display: inline-block;
+    margin-top: 1.75rem;
+    color: var(--text);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 180ms ease;
+  }
+
+  .portfolio-link:hover {
+    color: var(--crimson-text);
+  }
+
+  .portfolio-link:focus-visible {
+    outline: 2px solid var(--crimson-text);
+    outline-offset: 5px;
+  }
+</style>
