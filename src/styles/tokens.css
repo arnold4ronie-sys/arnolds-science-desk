@@ -1,0 +1,21 @@
+:root {
+  --black: #05070b;
+  --navy: #0a1020;
+  --navy-2: #0e1628;
+  --charcoal: #151a22;
+  --text: #e9ebef;
+  --silver: #c9ccd3;
+  --muted: #9aa1ad;
+  --crimson: #b81d2a;
+  --crimson-bright: #e03a46;
+  --crimson-text: #f26b74;
+  --line: rgba(255, 255, 255, 0.1);
+  --line-strong: rgba(255, 255, 255, 0.22);
+  --font-serif: 'Newsreader', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --max: 76rem;
+  --gutter: clamp(1.1rem, 4vw, 2rem);
+  --section-y: clamp(3.5rem, 8vw, 6.5rem);
+  --radius: 4px;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
