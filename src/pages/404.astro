@@ -1,0 +1,22 @@
+---
+export const prerender = true;
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Page not found" noindex>
+  <section class="section">
+    <div class="container">
+      <p class="kicker">Error 404</p>
+      <h1>This page isn't here yet.</h1>
+      <p class="msg">
+        The page may have moved, or it may still be under construction. Head back to the homepage to keep reading.
+      </p>
+      <a class="btn btn-primary" href="/">Back to the homepage</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  h1 { margin-top: 1.2rem; font-size: clamp(2.2rem, 6vw, 4rem); }
+  .msg { max-width: 32rem; margin: 1.2rem 0 2rem; color: var(--silver); }
+</style>
