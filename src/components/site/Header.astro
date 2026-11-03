@@ -1,0 +1,199 @@
+---
+import { categoryHref } from '../../data/categories';
+
+const pathname = Astro.url.pathname;
+
+const links = [
+  { name: 'Home', href: '/' },
+  { name: 'Science & Research', href: categoryHref(['science-research']) },
+  { name: 'Health', href: categoryHref(['health-communication']) },
+  { name: 'Technology', href: categoryHref(['technology-innovation']) },
+  { name: 'Environment', href: categoryHref(['environment-climate']) },
+  { name: 'Multimedia', href: categoryHref(['multimedia']) },
+  { name: 'About', href: '/about' },
+];
+
+const isActive = (href: string) =>
+  href === '/' ? pathname === '/' : pathname === href || pathname.startsWith(href + '/');
+---
+
+<header class="site-header">
+  <div class="container bar">
+    <a class="brand" href="/" aria-label="Arnold's Science Desk, home">
+      <svg class="mark" viewBox="0 0 32 32" aria-hidden="true">
+        <circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" stroke-width="1.5" />
+        <ellipse cx="16" cy="16" rx="13" ry="5" fill="none" stroke="currentColor" stroke-width="1" opacity="0.7" transform="rotate(-30 16 16)" />
+        <circle class="dot" cx="16" cy="16" r="3" />
+      </svg>
+      <span class="brand-text">
+        <span class="brand-top">Arnold's</span>
+        <span class="brand-main">Science Desk</span>
+      </span>
+    </a>
+
+    <a class="search-link" href="/search">
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <circle cx="11" cy="11" r="6.5" /><path d="M16 16l4.5 4.5" />
+      </svg>
+      <span>Search</span>
+    </a>
+
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu">
+      <svg class="icon-open" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <path d="M4 7h16M4 12h16M4 17h16" />
+      </svg>
+      <svg class="icon-close" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <path d="M6 6l12 12M18 6L6 18" />
+      </svg>
+    </button>
+
+    <nav id="primary-nav" class="nav" aria-label="Primary">
+      <ul>
+        {links.map((l) => (
+          <li>
+            <a href={l.href} aria-current={isActive(l.href) ? 'page' : undefined}>{l.name}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('.menu-toggle');
+  const nav = document.getElementById('primary-nav');
+
+  function setOpen(open: boolean, returnFocus = false) {
+    if (!btn || !nav) return;
+    btn.setAttribute('aria-expanded', String(open));
+    btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    nav.classList.toggle('is-open', open);
+    if (!open && returnFocus) btn.focus();
+  }
+
+  btn?.addEventListener('click', () => {
+    setOpen(btn.getAttribute('aria-expanded') !== 'true');
+  });
+
+  nav?.addEventListener('click', (e) => {
+    if ((e.target as Element).closest('a')) setOpen(false);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && btn?.getAttribute('aria-expanded') === 'true') {
+      setOpen(false, true);
+    }
+  });
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(5, 7, 11, 0.94);
+    border-bottom: 1px solid var(--line);
+  }
+  @supports (backdrop-filter: blur(1px)) {
+    .site-header {
+      background: rgba(5, 7, 11, 0.78);
+      backdrop-filter: blur(14px) saturate(1.2);
+    }
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    min-height: 4.25rem;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-right: auto;
+    text-decoration: none;
+    color: var(--text);
+  }
+  .mark { width: 30px; height: 30px; color: var(--silver); }
+  .mark .dot { fill: var(--crimson-bright); }
+  .brand-text { display: flex; flex-direction: column; line-height: 1; }
+  .brand-top {
+    margin-bottom: 0.28rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .brand-main {
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+
+  .search-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.5rem 0.25rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    color: var(--silver);
+    text-decoration: none;
+  }
+  .search-link:hover { color: #fff; }
+
+  .menu-toggle {
+    display: none;
+    width: 2.75rem;
+    height: 2.75rem;
+    place-items: center;
+    background: transparent;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    color: var(--text);
+  }
+  :global(.js) .menu-toggle { display: inline-grid; }
+  .icon-close { display: none; }
+  .menu-toggle[aria-expanded='true'] .icon-open { display: none; }
+  .menu-toggle[aria-expanded='true'] .icon-close { display: block; }
+
+  .nav { order: 3; width: 100%; padding-bottom: 0.75rem; }
+  :global(.js) .nav { display: none; }
+  :global(.js) .nav.is-open { display: block; }
+  .nav ul { display: flex; flex-direction: column; border-top: 1px solid var(--line); }
+  .nav li { border-bottom: 1px solid var(--line); }
+  .nav a {
+    display: block;
+    padding: 0.85rem 0.25rem;
+    font-size: 1rem;
+    color: var(--silver);
+    text-decoration: none;
+  }
+  .nav a:hover, .nav a[aria-current='page'] { color: #fff; }
+
+  @media (min-width: 1080px) {
+    .bar { flex-wrap: nowrap; }
+    .brand { margin-right: 1.5rem; }
+    .menu-toggle, :global(.js) .menu-toggle { display: none; }
+    .nav, :global(.js) .nav {
+      display: block;
+      order: 0;
+      width: auto;
+      padding-bottom: 0;
+    }
+    .nav ul { flex-direction: row; gap: 0.35rem; border-top: 0; }
+    .nav li { border-bottom: 0; }
+    .nav a {
+      padding: 0.55rem 0.7rem;
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+      border-bottom: 2px solid transparent;
+    }
+    .nav a[aria-current='page'] { border-bottom-color: var(--crimson-bright); }
+    .search-link { order: 2; margin-left: auto; }
+  }
+</style>
