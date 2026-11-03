@@ -1,0 +1,53 @@
+---
+import SectionHeader from './SectionHeader.astro';
+import SampleNotice from './SampleNotice.astro';
+import StoryCard from '../stories/StoryCard.astro';
+import { getLatestStories } from '../../data/sample/stories';
+
+const stories = getLatestStories(6);
+const hasSample = stories.some((s) => s.isSample);
+---
+
+{
+  stories.length > 0 && (
+    <section id="latest" class="latest section" aria-labelledby="latest-title">
+      <div class="container">
+        <SectionHeader
+          headingId="latest-title"
+          kicker="Latest"
+          title="Latest articles"
+          intro="New reporting across health, science, technology, environment and society."
+        >
+          {hasSample && <SampleNotice />}
+        </SectionHeader>
+
+        <div class="list">
+          {stories.map((story) => <StoryCard story={story} variant="row" />)}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .latest {
+    background: linear-gradient(
+      180deg,
+      var(--black),
+      var(--navy) 18%,
+      var(--navy) 82%,
+      var(--black)
+    );
+  }
+
+  .list {
+    display: grid;
+    gap: 0 clamp(2rem, 4vw, 3.5rem);
+  }
+
+  @media (min-width: 760px) {
+    .list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>
