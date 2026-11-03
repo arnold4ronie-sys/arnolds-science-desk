@@ -1,0 +1,168 @@
+---
+ // The hero photograph lives in public/images/hero.jpeg. It is never stretched or edited:
+// it is shown whole (object-fit: contain) in a portrait frame, and CSS only fades its edges.
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-bg" aria-hidden="true"></div>
+
+  <div class="container hero-grid">
+    <figure class="hero-figure">
+      <div class="frame">
+        <img
+          src="/images/hero.jpeg"
+          alt="Hand-drawn chemical structures in red and silver on a black background"
+          fetchpriority="high"
+          decoding="sync"
+        />
+      </div>
+      <figcaption class="visually-hidden">Official image of Arnold's Science Desk</figcaption>
+    </figure>
+
+    <div class="hero-copy">
+      <p class="kicker rise" style="--d: 0ms">Independent science &amp; health journalism</p>
+      <h1 id="hero-title" class="rise" style="--d: 120ms">
+        Science, made clear. <em>From Kenya to the world.</em>
+      </h1>
+      <p class="lede rise" style="--d: 240ms">
+        Arnold's Science Desk turns research, health information and technology into reporting that
+        ordinary readers can understand and use, grounded in Kenya and Africa, and alert to the world.
+      </p>
+      <div class="actions rise" style="--d: 360ms">
+        <a class="btn btn-primary" href="#latest">Read the latest</a>
+        <a class="btn btn-ghost" href="#topics">Explore topics</a>
+      </div>
+      <p class="coverage rise" style="--d: 480ms">
+        <span>Coverage</span> Kenya <i aria-hidden="true">·</i> Africa <i aria-hidden="true">·</i> Global
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding-block: 1rem clamp(3rem, 7vw, 6rem);
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(60% 50% at 82% 18%, rgba(184, 29, 42, 0.16), transparent 70%),
+      radial-gradient(70% 60% at 8% 92%, rgba(22, 38, 80, 0.55), transparent 70%),
+      linear-gradient(180deg, var(--black), var(--navy));
+  }
+  .hero-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 88px),
+      repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 88px);
+    -webkit-mask-image: radial-gradient(ellipse 70% 70% at 60% 40%, #000, transparent);
+    mask-image: radial-gradient(ellipse 70% 70% at 60% 40%, #000, transparent);
+  }
+
+  .hero-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    align-items: center;
+  }
+
+  .hero-figure {
+    display: flex;
+    justify-content: center;
+    margin: 0;
+  }
+  .frame {
+    --h: min(60svh, 30rem);
+    width: calc(var(--h) * 0.5627);
+    max-width: 100%;
+    aspect-ratio: 700 / 1244;
+    -webkit-mask-image: radial-gradient(ellipse 82% 80% at 50% 44%, #000 52%, transparent 100%);
+    mask-image: radial-gradient(ellipse 82% 80% at 50% 44%, #000 52%, transparent 100%);
+    animation: reveal 1.8s var(--ease) both;
+  }
+  .frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .hero-copy {
+    position: relative;
+    margin-top: -1rem;
+  }
+
+  h1 {
+    margin-top: 1.1rem;
+    font-size: clamp(2.5rem, 7.5vw, 5rem);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+  }
+  h1 em { font-style: italic; color: var(--silver); }
+
+  .lede {
+    max-width: 34rem;
+    margin-top: 1.4rem;
+    font-size: clamp(1.05rem, 1.6vw, 1.2rem);
+    color: var(--silver);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+
+  .coverage {
+    margin-top: 2.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.82rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--silver);
+  }
+  .coverage span { margin-right: 0.8rem; color: var(--muted); }
+  .coverage i { margin-inline: 0.35rem; color: var(--crimson-bright); font-style: normal; }
+
+  @media (min-width: 860px) {
+    .hero { padding-top: clamp(2.5rem, 5vw, 4rem); }
+    .hero-grid {
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+      gap: clamp(2rem, 5vw, 4.5rem);
+    }
+    .hero-copy { order: 1; margin-top: 0; }
+    .hero-figure {
+      order: 2;
+      position: relative;
+      justify-self: end;
+    }
+    .hero-figure::before {
+      content: '';
+      position: absolute;
+      left: -1.25rem;
+      top: 12%;
+      bottom: 12%;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--crimson-bright), transparent);
+    }
+    .frame {
+      --h: min(78vh, 46rem);
+      -webkit-mask-image: radial-gradient(ellipse 78% 76% at 50% 48%, #000 55%, transparent 100%);
+      mask-image: radial-gradient(ellipse 78% 76% at 50% 48%, #000 55%, transparent 100%);
+    }
+  }
+
+  @keyframes reveal {
+    from { opacity: 0; transform: scale(1.04); }
+    to { opacity: 1; transform: none; }
+  }
+</style>
