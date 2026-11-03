@@ -1,0 +1,219 @@
+---
+import { categoryHref } from '../../data/categories';
+import { findCategory } from '../../lib/categories';
+import { storyHref } from '../../lib/routes';
+import type { StorySummary } from '../../types/story';
+
+interface Props {
+  story: StorySummary;
+  variant?: 'lead' | 'card' | 'row';
+}
+
+const { story, variant = 'card' } = Astro.props;
+
+const category = findCategory(story.categoryPath);
+const categoryUrl = categoryHref(story.categoryPath);
+const url = storyHref(story.slug);
+
+const date = new Intl.DateTimeFormat('en-GB', {
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric',
+  timeZone: 'UTC',
+}).format(new Date(story.date));
+
+const formatLabels: Record<string, string> = {
+  video: 'Video',
+  'photo-essay': 'Photo essay',
+  interview: 'Interview',
+};
+const formatLabel = story.format ? formatLabels[story.format] : undefined;
+const length =
+  !story.format || story.format === 'article'
+    ? `${story.readingMinutes} min read`
+    : `${story.readingMinutes} min`;
+---
+
+<article class={`card card--${variant}`}>
+  <div class="media">
+    {
+      story.image ? (
+        <img src={story.image.src} alt={story.image.alt} loading="lazy" decoding="async" />
+      ) : (
+        <div class="placeholder" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.2">
+            <circle cx="16" cy="16" r="13" />
+            <ellipse cx="16" cy="16" rx="13" ry="5" transform="rotate(-30 16 16)" opacity="0.7" />
+            <circle cx="16" cy="16" r="2.6" fill="currentColor" stroke="none" />
+          </svg>
+        </div>
+      )
+    }
+    {story.isSample && <span class="badge">Sample</span>}
+  </div>
+
+  <div class="body">
+    <p class="meta">
+      <a class="cat" href={categoryUrl}>{category?.name ?? 'Story'}</a>
+      {formatLabel && <span class="format">{formatLabel}</span>}
+    </p>
+    <h3 class="title"><a href={url}>{story.title}</a></h3>
+    <p class="excerpt">{story.excerpt}</p>
+    <p class="byline">
+      <time datetime={story.date}>{date}</time>
+      <span aria-hidden="true">·</span>
+      <span>{length}</span>
+    </p>
+  </div>
+</article>
+
+<style>
+  .card {
+    position: relative;
+    display: grid;
+    gap: 1.1rem;
+    align-content: start;
+  }
+
+  .media {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 3 / 2;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--navy-2);
+  }
+  .media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s var(--ease);
+  }
+  .placeholder {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background:
+      radial-gradient(70% 60% at 88% 8%, rgba(184, 29, 42, 0.22), transparent 70%),
+      radial-gradient(80% 70% at 8% 100%, rgba(30, 50, 100, 0.45), transparent 70%),
+      linear-gradient(160deg, var(--navy-2), var(--black));
+  }
+  .placeholder::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px 32px),
+      repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px 32px);
+  }
+  .placeholder svg {
+    position: relative;
+    width: 2.6rem;
+    color: rgba(201, 204, 211, 0.38);
+    transition: transform 0.7s var(--ease);
+  }
+  .card:hover .media img,
+  .card:hover .placeholder svg { transform: scale(1.05); }
+
+  .badge {
+    position: absolute;
+    top: 0.7rem;
+    left: 0.7rem;
+    padding: 0.2rem 0.6rem;
+    border: 1px solid rgba(242, 107, 116, 0.5);
+    border-radius: 999px;
+    background: rgba(5, 7, 11, 0.75);
+    font-size: 0.65rem;
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--crimson-text);
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 0.9rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .cat {
+    position: relative;
+    z-index: 2;
+    color: var(--crimson-text);
+    text-decoration: none;
+  }
+  .cat:hover { text-decoration: underline; }
+  .format { color: var(--muted); }
+
+  .title {
+    margin-top: 0.55rem;
+    font-size: 1.4rem;
+    line-height: 1.18;
+  }
+  .title a { color: var(--text); text-decoration: none; }
+  .title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+  .title a:focus-visible {
+    outline: 2px solid var(--crimson-text);
+    outline-offset: 4px;
+    border-radius: var(--radius);
+  }
+  .card:hover .title a { color: #fff; text-decoration: underline; text-decoration-color: var(--crimson-bright); }
+
+  .excerpt {
+    margin-top: 0.65rem;
+    font-size: 0.95rem;
+    color: var(--muted);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
+  }
+
+  .byline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.8rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  .card--lead .media { aspect-ratio: 16 / 10; }
+  .card--lead .title { font-size: clamp(1.75rem, 3.2vw, 2.5rem); line-height: 1.1; }
+  .card--lead .excerpt { font-size: 1.05rem; color: var(--silver); -webkit-line-clamp: 4; line-clamp: 4; }
+
+  .card--row {
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    gap: 1.1rem;
+    align-items: start;
+    padding-block: 1.35rem;
+    border-top: 1px solid var(--line);
+  }
+  .card--row .media { aspect-ratio: 1 / 1; }
+  .card--row .title { margin-top: 0.4rem; font-size: 1.2rem; }
+  .card--row .excerpt { display: none; }
+  .card--row .badge {
+    top: 0.4rem;
+    left: 0.4rem;
+    padding: 0.1rem 0.4rem;
+    font-size: 0.55rem;
+  }
+  .card--row .placeholder svg { width: 1.8rem; }
+
+  @media (min-width: 640px) {
+    .card--row { grid-template-columns: 9rem minmax(0, 1fr); }
+    .card--row .excerpt { display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; }
+  }
+</style>
