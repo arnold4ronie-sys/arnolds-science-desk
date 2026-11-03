@@ -1,0 +1,109 @@
+---
+import { siteConfig } from '../../data/site';
+import { categories, categoryHref } from '../../data/categories';
+
+const year = new Date().getFullYear();
+const explore = categories.map((c) => ({ name: c.name, href: categoryHref([c.slug]) }));
+const publication = [
+  { name: 'About', href: '/about' },
+  { name: 'The editor', href: '/editor' },
+  { name: 'Search', href: '/search' },
+];
+---
+
+<footer class="site-footer">
+  <div class="container grid">
+    <div class="about">
+      <p class="brand">Arnold's Science Desk</p>
+      <p class="tagline">{siteConfig.tagline}</p>
+    </div>
+
+    <nav aria-label="Explore topics">
+      <h2>Explore</h2>
+      <ul>
+        {explore.map((l) => <li><a href={l.href}>{l.name}</a></li>)}
+      </ul>
+    </nav>
+
+    <nav aria-label="Publication">
+      <h2>Publication</h2>
+      <ul>
+        {publication.map((l) => <li><a href={l.href}>{l.name}</a></li>)}
+      </ul>
+    </nav>
+
+    {siteConfig.social.length > 0 && (
+      <nav aria-label="Social media">
+        <h2>Follow</h2>
+        <ul>
+          {siteConfig.social.map((s) => (
+            <li><a href={s.href} rel="noopener noreferrer" target="_blank">{s.label}</a></li>
+          ))}
+        </ul>
+      </nav>
+    )}
+  </div>
+
+  <div class="container legal">
+    <p>&copy; {year} Arnold's Science Desk. An independent publication.</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: var(--section-y);
+    padding-top: clamp(2.5rem, 6vw, 4rem);
+    background: linear-gradient(180deg, var(--black), var(--navy));
+    border-top: 1px solid var(--line);
+  }
+  .grid {
+    display: grid;
+    gap: 2.25rem;
+    grid-template-columns: 1fr;
+    padding-bottom: 2.5rem;
+  }
+  @media (min-width: 640px) {
+    .grid { grid-template-columns: 1fr 1fr; }
+    .about { grid-column: 1 / -1; }
+  }
+  @media (min-width: 960px) {
+    .grid { grid-template-columns: 1.5fr 1fr 1fr 1fr; }
+    .about { grid-column: auto; }
+  }
+
+  .brand {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  .tagline {
+    max-width: 24rem;
+    margin-top: 0.6rem;
+    font-size: 0.95rem;
+    color: var(--muted);
+  }
+
+  h2 {
+    margin-bottom: 0.9rem;
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--crimson-text);
+  }
+  ul { display: grid; gap: 0.5rem; }
+  nav a {
+    font-size: 0.95rem;
+    color: var(--silver);
+    text-decoration: none;
+  }
+  nav a:hover { color: #fff; text-decoration: underline; }
+
+  .legal {
+    padding-block: 1.4rem 2rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+</style>
