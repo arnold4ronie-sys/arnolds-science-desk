@@ -1,0 +1,73 @@
+---
+const pillars = [
+  {
+    title: 'Research, made readable',
+    text: 'Studies, trials and policy papers explained in plain language, without losing the nuance.',
+  },
+  {
+    title: 'Health that helps',
+    text: 'Clear information on HIV and AIDS, cancer, diabetes, mental health, infectious diseases and other issues shaping public health.',
+  },
+  {
+    title: 'Africa at the centre',
+    text: 'Science and innovation as they affect Kenyan and African communities, set beside the global picture.',
+  },
+];
+---
+
+<section class="mission section" aria-labelledby="mission-title">
+  <div class="container">
+    <p class="kicker">Our mission</p>
+    <h2 id="mission-title">
+      We make scientific research, health information and technology understandable to ordinary
+      readers, <em>starting from Kenya and Africa</em> and looking outward to the world.
+    </h2>
+
+    <ol class="pillars">
+      {pillars.map((p, i) => (
+        <li>
+          <span class="num" aria-hidden="true">0{i + 1}</span>
+          <h3>{p.title}</h3>
+          <p>{p.text}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  h2 {
+    max-width: 52rem;
+    margin-top: 1.4rem;
+    font-size: clamp(1.75rem, 4vw, 3rem);
+    line-height: 1.15;
+  }
+  h2 em { font-style: italic; color: var(--silver); }
+
+  .pillars {
+    display: grid;
+    gap: 2rem;
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+  }
+  .pillars li {
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line-strong);
+  }
+  .num {
+    display: block;
+    margin-bottom: 0.9rem;
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
+    color: var(--crimson-text);
+  }
+  h3 { font-size: 1.35rem; }
+  .pillars p {
+    margin-top: 0.6rem;
+    font-size: 0.98rem;
+    color: var(--muted);
+  }
+
+  @media (min-width: 800px) {
+    .pillars { grid-template-columns: repeat(3, 1fr); gap: 2.5rem; }
+  }
+</style>
